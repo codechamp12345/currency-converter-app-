@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: rgb(214, 111, 181);
+            text-align: center;
+        }
+
+        #converter {
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #c8ce91;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(1, 0, 0, 0.9);
+        }
+
+        h2 {
+            color: #a8c5c4;
+        }
+
+        input {
+            width: 84%;
+            padding: 7px;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 81%;
+            padding: 10px;
+            margin-bottom: 25px;
+        }
+
+        button {
+            background-color: #5174c0;
+            color: #fff;
+            padding: 11px 20px;
+            border: none;
+            border-radius: 22px;
+            cursor: pointer;
+        }
+
+        #result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #amount{
+            height: 30%;
+            width: 305px;
+            height: 25px;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+<h1 style="color: rgb(83, 7, 154);">Welcome To Currency Converter App</h1>
+    <div id="converter">
+        <h2 style="color: rgb(220, 143, 229);">Currency Converter</h2>
+
+        <input type="number" id="amount" placeholder="Enter amount" step="1">
+        <select id="fromCurrency">
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <option value="CAD">CAD</option>
+            <option value="JPY">JPY</option>
+            <option value="AUD">AUD</option>
+            <option value="INR">INR</option>
+            <option value="CNY">CNY</option>
+            <option value="BRL">BRL</option>
+            <option value="ZAR">ZAR</option>
+        </select>
+        <select id="toCurrency">
+            <option value="INR">INR</option>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <option value="CAD">CAD</option>
+            <option value="JPY">JPY</option>
+            <option value="AUD">AUD</option>
+            <option value="CNY">CNY</option>
+            <option value="BRL">BRL</option>
+            <option value="ZAR">ZAR</option>
+        </select>
+        <button onclick="convertCurrency()">Convert</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function convertCurrency() {
+            const amount = document.getElementById("amount").value;
+            const fromCurrency = document.getElementById("fromCurrency").value;
+            const toCurrency = document.getElementById("toCurrency").value;
+
+            fetch(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`)
+                .then(response => response.json())
+                .then(data => {
+                    const exchangeRate = data.rates[toCurrency];
+                    const result = (amount * exchangeRate).toFixed(2);
+                    document.getElementById("result").innerHTML = `${amount} ${fromCurrency} = ${result} ${toCurrency}`;
+                })
+                .catch(error => {
+                    console.error("Error fetching exchange rates:", error);
+                    document.getElementById("result").innerHTML = "Error fetching exchange rates";
+                });
+        }
+    </script>
+
+</body>
+</html>
